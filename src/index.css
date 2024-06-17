@@ -1,0 +1,182 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.hero-mask {
+  --size: clamp(200px, 70vmin, 80rem);
+  --size-4: 0rem;
+  /* -webkit-mask:
+    radial-gradient(#0000 0 30%, #000 30.5%) 70% calc(var(--size) * 0.5) / 300% 100%,
+            linear-gradient(0deg, black, black) 50% 0 / 100% 0 no-repeat,
+            linear-gradient(0deg, #000000, black) 50% 100% / 100% 0 no-repeat; */
+  mask:
+    radial-gradient(#0000 0 32%, #000 32.1%) 145% calc(var(--size) * 1.7) / 70% 120%,
+    linear-gradient(0deg, black, black) 50% 0 / 100% 0 no-repeat,
+    linear-gradient(0deg, #000000, black) 50% 100% / 100% 0 no-repeat;
+}
+
+@keyframes track {
+  /* 0% { 
+        transform: translateX(calc((var(--imgWidth)+16px)*-1)); 
+    }
+    100% { transform: translateX(-1806px); } */
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  @apply font-main italic font-thin;
+}
+
+h1 {
+  @apply text-6xl;
+}
+
+h2 {
+  @apply text-4xl;
+}
+
+/* make every h3 within a .timeline class use the font-sans class (h3 is deep insisde timeline) */
+/* eg.: 
+    <div class="timeline">
+        <div>
+            <h3>...</h3>
+        </div>
+    </div>
+    ...
+
+    Make the font be applied as important to override the h3 font-sans class
+*/
+
+.timeline h3 {
+  @apply font-sans font-semibold not-italic whitespace-nowrap !important;
+}
+
+/* Editor's Note Font Family */
+@font-face {
+  font-family: "Editor's Note";
+  src: url("/fonts/EditorsNote-Thin.woff2") format("woff2");
+  font-weight: 100;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Editor's Note";
+  src: url("/fonts/EditorsNote-ThinItalic.woff2") format("woff2");
+  font-weight: 100;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: "Editor's Note";
+  src: url("/fonts/EditorsNote-Extralight.woff2") format("woff2");
+  font-weight: 200;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Editor's Note";
+  src: url("/fonts/EditorsNote-ExtralightItalic.woff2") format("woff2");
+  font-weight: 200;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: "Editor's Note";
+  src: url("/fonts/EditorsNote-Light.woff2") format("woff2");
+  font-weight: 300;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Editor's Note";
+  src: url("/fonts/EditorsNote-LightItalic.woff2") format("woff2");
+  font-weight: 300;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: "Editor's Note";
+  src: url("/fonts/EditorsNote-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Editor's Note";
+  src: url("/fonts/EditorsNote-Italic.woff2") format("woff2");
+  font-weight: 400;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: "Editor's Note";
+  src: url("/fonts/EditorsNote-Medium.woff2") format("woff2");
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Editor's Note";
+  src: url("/fonts/EditorsNote-MediumItalic.woff2") format("woff2");
+  font-weight: 500;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: "Editor's Note";
+  src: url("/fonts/EditorsNote-Semibold.woff2") format("woff2");
+  font-weight: 600;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Editor's Note";
+  src: url("/fonts/EditorsNote-SemiboldItalic.woff2") format("woff2");
+  font-weight: 600;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: "Editor's Note";
+  src: url("/fonts/EditorsNote-Bold.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Editor's Note";
+  src: url("/fonts/EditorsNote-BoldItalic.woff2") format("woff2");
+  font-weight: 700;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: "Editor's Note";
+  src: url("/fonts/EditorsNote-Hairline.woff2") format("woff2");
+  font-weight: 100;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Editor's Note";
+  src: url("/fonts/EditorsNote-HairlineItalic.woff2") format("woff2");
+  font-weight: 100;
+  font-style: italic;
+}
+
+/* CSS */
+:root {
+  font-family: Inter, sans-serif;
+  font-feature-settings:
+    "liga" 1,
+    "calt" 1; /* fix for Chrome */
+}
+@supports (font-variation-settings: normal) {
+  :root {
+    font-family: InterVariable, sans-serif;
+  }
+}

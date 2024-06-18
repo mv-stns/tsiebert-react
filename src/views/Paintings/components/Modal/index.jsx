@@ -3,29 +3,28 @@ import { Dialog, DialogPanel, DialogTitle, Transition, TransitionChild } from "@
 import Paintings from "@/views/Paintings";
 
 const Modal = ({ selectedPainting, popupRef, isPopupOpen, setIsPopupOpen, handleClosePopup, dialogPanelRef }) => {
-    Modal.propTypes = Paintings.propTypes;
-    popupRef = useRef(null);
-    dialogPanelRef = useRef(null);
-    
-    function HandleClickOutside(ref, childRef) {
-        useEffect(() => {
-            function handleClickOutside(event) {
-                // dont close when clicking childRef
-                if (ref.current && !ref.current.contains(event.target) && !childRef.current.contains(event.target)) {
-                    setIsPopupOpen(false);
-                }
-            }
-            document.addEventListener("mousedown", handleClickOutside);
-            return () => {
-                document.removeEventListener("mousedown", handleClickOutside);
-            };
-        }, [ref, childRef]);
-    }
-    HandleClickOutside(popupRef, dialogPanelRef);
+	Modal.propTypes = Paintings.propTypes;
+	popupRef = useRef(null);
+	dialogPanelRef = useRef(null);
 
+	function HandleClickOutside(ref, childRef) {
+		useEffect(() => {
+			function handleClickOutside(event) {
+				// dont close when clicking childRef
+				if (ref.current && !ref.current.contains(event.target) && !childRef.current.contains(event.target)) {
+					setIsPopupOpen(false);
+				}
+			}
+			document.addEventListener("mousedown", handleClickOutside);
+			return () => {
+				document.removeEventListener("mousedown", handleClickOutside);
+			};
+		}, [ref, childRef]);
+	}
+	HandleClickOutside(popupRef, dialogPanelRef);
 
 	return (
-		<Transition enter="ease-out duration-300" enterFrom="opacity-0" enterTo="opacity-100" leave="ease-in duration-200" leaveFrom="opacity-100" leaveTo="opacity-0" as={Fragment} show={isPopupOpen} onClose={() => setIsPopupOpen(false)}>
+		<Transition appear enter="ease-out duration-300" enterFrom="opacity-0" enterTo="opacity-100" leave="ease-in duration-200" leaveFrom="opacity-100" leaveTo="opacity-0" as={Fragment} show={isPopupOpen} onClose={() => setIsPopupOpen(false)}>
 			<Dialog as="div" className="relative z-10" onClose={() => {}}>
 				<TransitionChild as={Fragment} enter="ease-out duration-300" enterFrom="opacity-0" enterTo="opacity-100" leave="ease-in duration-200" leaveFrom="opacity-100" leaveTo="opacity-0">
 					<div className="fixed inset-0 bg-slate-400/80 backdrop-blur-lg transition-all" ref={popupRef} />
@@ -33,9 +32,11 @@ const Modal = ({ selectedPainting, popupRef, isPopupOpen, setIsPopupOpen, handle
 
 				<DialogPanel className="fixed inset-0 z-10 overflow-y-auto p-4 sm:p-6 md:p-20">
 					<TransitionChild as={Fragment} enter="ease-out duration-300" enterFrom="opacity-0 scale-95 blur-lg" enterTo="opacity-100 scale-100" leave="ease-in duration-200" leaveFrom="opacity-100 scale-100" leaveTo="opacity-0 scale-95 blur-none">
-						<div ref={dialogPanelRef} id="WTF" className="relative flex-col sm:flex-row flex p-8 bg-white rounded-3xl shadow-lg max-w-7xl mx-auto gap-4" onClick={(e) => e.stopPropagation()}>
+						<div ref={dialogPanelRef} className="relative flex-col sm:flex-row flex p-8 bg-white rounded-3xl shadow-lg max-w-7xl mx-auto gap-4" onClick={(e) => e.stopPropagation()}>
 							<img src={`/src/assets/paintings/${selectedPainting.image}`} alt={selectedPainting.name} className="aspect-square max-w-lg rounded-md lg:h-[700px] object-contain pointer-events-none" />
-							<div className="flex flex-col gap-6 text-slate-900">								<div className="flex items-center self-start gap-2">
+							<div className="flex flex-col gap-6 text-slate-900">
+								{" "}
+								<div className="flex items-center self-start gap-2">
 									<DialogTitle as="h2" className="text-4xl font-semibold not-italic font-sans text-center">
 										{selectedPainting.name}
 									</DialogTitle>

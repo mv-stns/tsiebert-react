@@ -4,7 +4,7 @@ import profileImage from "../../assets/personal/profile.webp"
 export const Biography = () => {
   return (
     <SectionWrapper title="Biografie">
-      <div className="flex flex-col lg:flex-row gap-14 mx-center">
+      <div className="flex flex-col lg:flex-row gap-14 justify-center">
         <div className="flex flex-col gap-14">
           <div style={{ backgroundImage: `url(${profileImage})` }}  className="relative rotate-[-3deg] hover:rotate-0 hover:scale-125 transition-all duration-300 ease-in-out w-[402px] h-[335px] rounded-[8px] bg-cover bg-[50%_50%] [box-shadow:_0px_0px_0px_4px_rgba(0,_0,_0,_0.06),_0px_36.257px_36.257px_-18.128px_rgba(0,_0,_0,_0.06),_0px_18.128px_18.128px_-9.064px_rgba(0,_0,_0,_0.06),_0px_9.064px_9.064px_-4.532px_rgba(0,_0,_0,_0.06),_0px_4.532px_4.532px_-2.266px_rgba(0,_0,_0,_0.06),_0px_1.511px_1.511px_-0.755px_rgba(0,_0,_0,_0.06)]"></div>
           <div className="tracking-tight font-secondary font-regular leading-8 text-2xl w-[400px]">

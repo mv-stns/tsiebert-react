@@ -6,6 +6,7 @@ import Paintings from "./views/Paintings";
 import News from "./views/News";
 import Contact from "./views/Contact";
 import Footer from "./views/Footer";
+import { Toaster } from "@/components/ui/sonner"
 
 import { Helmet } from "react-helmet";
 import HeroSection from "./views/HeroSection/index.jsx";
@@ -25,6 +26,7 @@ function App() {
 			<News />
 			<Contact />
 			<Footer />
+			<Toaster />
 		</>
 	);
 }

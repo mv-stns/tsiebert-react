@@ -162,6 +162,20 @@ const Contact = () => {
 						)}
 					/>
 
+					<FormField
+						control={form.control}
+						name="captcha"
+						render={({ field }: { field: any }) => (
+							<FormItem className="hidden">
+								<FormLabel className="text-[11px] font-medium text-slate-700 uppercase">Captcha (Whats 2+2)</FormLabel>
+								<FormControl>
+									<Input {...field} />
+								</FormControl>
+								<FormMessage />
+							</FormItem>
+						)}
+					/>
+
 					<Button type="submit">Senden</Button>
 				</form>
 			</Form>

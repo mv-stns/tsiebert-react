@@ -20,7 +20,8 @@ const HeroSection = () => {
 
 	return (
 		<div className="h-screen w-full overflow-hidden flex-col bg-white relative pb-8 flex justify-end items-end">
-			<div className="hero-mask self-baseline gap-4 mb-24 flex [-webkit-mask:linear-gradient(90deg,_rgba(255,_255,_255,_0)_3%,_#FFFFFF_10%,_#FFFFFF_90%,_rgba(255,_255,_255,_0)_97%)]">
+			<div className="hero-mask self-baseline gap-4 mb-24 flex relative">
+				<div className="absolute inset-0 z-10 bg-white [-webkit-mask:linear-gradient(90deg,_rgba(255,_255,_255,_1)_0%,_rgba(255,_255,_255,_0.25)_10%,_rgba(255,_255,_255,_0)_11%,_rgba(255,_255,_255,_0)_50%,_rgba(255,_255,_255,_1)_88%,_rgba(255,_255,_255,_0.25)_89%,_rgba(255,_255,_255,_1)_100%)]"></div>
 				<ul className="animate-marquee h-[--size] flex my-auto gap-4 py-4">
 					{images.map((image, index) => (
 						<li key={index} className="childrenItem h-full aspect-[1] snap-center"> 

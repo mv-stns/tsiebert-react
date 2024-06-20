@@ -1,0 +1,28 @@
+{
+	"compileOnSave": false,
+	"compilerOptions": {
+		"target": "es2017",
+		"lib": ["es2017"],
+		"typeRoots": ["node_modules/@types"],
+		"allowSyntheticDefaultImports": true,
+		"experimentalDecorators": true,
+		"emitDecoratorMetadata": true,
+		"forceConsistentCasingInFileNames": true,
+		"moduleResolution": "node",
+		"module": "commonjs",
+		"pretty": true,
+		"sourceMap": true,
+		"declaration": true,
+		"outDir": "dist",
+		"esModuleInterop": true,
+		"resolveJsonModule": true,
+		"baseUrl": ".",
+		"paths": {
+			"@controllers/*": ["src/controllers/*"],
+			"@routes/*": ["src/routes/*"],
+			"@types/*": ["src/types/*"],
+		}
+	},
+	"include": ["src/**/*.ts"],
+	"exclude": ["node_modules"]
+}

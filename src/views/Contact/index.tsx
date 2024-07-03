@@ -21,7 +21,10 @@ const Contact = () => {
 		email: z.string().email("Bitte geben Sie eine gültige E-Mail-Adresse ein"),
 		phone: z.string().optional(),
 		message: z.string().min(10, "Die Nachricht muss mindestens 10 Zeichen lang sein").max(500, "Die Nachricht darf maximal 500 Zeichen lang sein"),
-		dataprivacy: z.boolean().refine((value) => value === true, { message: "Sie müssen die Datenschutzbestimmungen akzeptieren" }).optional(),
+		dataprivacy: z
+			.boolean()
+			.refine((value) => value === true, { message: "Sie müssen die Datenschutzbestimmungen akzeptieren" })
+			.optional(),
 		captcha: z.string().refine((value) => value === "", { message: "Es gab einen Fehler mit dem Captcha" }),
 	});
 
@@ -38,37 +41,39 @@ const Contact = () => {
 		},
 	});
 
-	const canSendEmail = () => {
-		if (typeof window !== 'undefined') {
-			const lastSentTime = localStorage.getItem('lastSentTime');
-			if (!lastSentTime) {
-				localStorage.setItem('lastSentTime', Date.now().toString());
-				return true; // Allow sending if no email has been sent yet
-			}
+	const onSubmit = async (data: z.infer<typeof FormSchema>) => {
+		// Send like this to api endpoints localhost:3000/mail
+		// {
+		// 	"firstname": "Marcus",
+		// 	"lastname": "Vaitschulis",
+		// 	"email": "marcus@vaitschulis.com",
+		// 	"message": "Inquiry 👋🏼",
+		// 	"phone": "01727486467"
+		// }
+		const mailUrl = "http://localhost:3000/mail";
+		try {
+			const jsonData = JSON.stringify(data);
+			const sendContactForm = () =>
+				new Promise((resolve) => {
+					resolve(
+						fetch(mailUrl, {
+							method: "POST",
+							headers: {
+								"Content-Type": "application/json",
+							},
+							body: jsonData,
+						})
+					);
+				});
 
-			const currentTime = Date.now();
-			const timeDiff = currentTime - parseInt(lastSentTime);
-			const timeLimit = 5 * 60 * 1000; // 5 minutes in milliseconds
-
-			if (timeDiff >= timeLimit) {
-				localStorage.setItem('lastSentTime', Date.now().toString());
-				return true;
-			} else {
-				return false;
-			}
+			const response = await sendContactForm();
+			const json = await response.json();
+			toast.success("Ihre Nachricht wurde erfolgreich gesendet");
+		} catch (error) {
+			toast.error("Es gab einen Fehler beim Senden der Nachricht" + error);
+			console.log(JSON.stringify(data));
 		}
-
-		return true;
 	};
-
-	function onSubmit(data: z.infer<typeof FormSchema>) {
-		setLastSentTime(Date.now());
-		if (!canSendEmail()) {
-			toast.error("Sie können nur alle 5 Minuten eine E-Mail senden");
-			return;
-		}
-		toast.success("Folgende Daten wurden gesendet: " + JSON.stringify(data));
-	}
 
 	return (
 		<SectionWrapper viewType="default" title="Kontakt">
@@ -120,7 +125,7 @@ const Contact = () => {
 						name="phone"
 						render={({ field }: { field: any }) => (
 							<FormItem>
-								<FormLabel className="block text-[11px] font-medium text-slate-700 uppercase">Telefon</FormLabel>
+								<FormLabel className="text-[11px] font-medium text-slate-700 flex gap-2 uppercase">Telefon <span className="text-slate-400">(Optional)</span></FormLabel>
 								<FormControl>
 									<Input {...field} />
 								</FormControl>
@@ -152,7 +157,10 @@ const Contact = () => {
 										<Checkbox {...field} onClick={() => form.setValue("dataprivacy", !form.getValues("dataprivacy"))} />
 										<div className="grid gap-1.5 leading-none">
 											<label htmlFor="terms1" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-												Sie akzeptieren unsere <a href="/datenschutz" className="underline-offset-4 hover:text-[hsla(196,80%,40%,1)] transition-colors duration-200 ease-in-out text-[hsla(196,80%,56%,1)] underline">Datenschutzbestimmungen</a>
+												Sie akzeptieren unsere{" "}
+												<a href="/datenschutz" className="underline-offset-4 hover:text-[hsla(196,80%,40%,1)] transition-colors duration-200 ease-in-out text-[hsla(196,80%,56%,1)] underline">
+													Datenschutzbestimmungen
+												</a>
 											</label>
 										</div>
 									</div>

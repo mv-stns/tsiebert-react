@@ -10,6 +10,13 @@ export default defineConfig({
     alias: {
       // eslint-disable-next-line no-undef
       "@": path.resolve(__dirname, "./src"),
+      // resolve @views to src/views
+      "@views": path.resolve(__dirname, "./src/views"),
+      "@app": "./src/app",
+      "@assets": "./src/assets",
+      "@components": "./src/components",
+      "@styles": "./src/styles",
+      "@utils": "./src/utils",
     },
   },
 })

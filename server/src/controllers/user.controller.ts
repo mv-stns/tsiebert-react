@@ -138,15 +138,20 @@ export const getRole = async (req, res) => {
 export const authUser = async (req, res) => {
 	try {
 		const { email, password } = req.body as User;
+		if (!password) {
+			res.status(400).send("Password is required");
+			return;
+		}
 		const user = await userClient.findUnique({
 			where: {
 				email,
 			},
 		});
 		if (user.password === hashPassword(password)) {
-			res.status(200).send("User authenticated");
+			//send authorized as json
+			res.json({ authorized: true }).status(200);
 		} else {
-			res.sendStatus(401).send("Unauthorized");
+			res.sendStatus(401);
 		}
 	} catch (err) {
 		console.log(err);

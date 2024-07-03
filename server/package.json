@@ -17,19 +17,25 @@
 	},
 	"scripts": {
 		"migrate": "prisma migrate dev",
-		"dev": "nodemon src/index.ts"
+		"dev": "nodemon src/index.ts",
+		"email": "email dev"
 	},
 	"author": "",
 	"license": "ISC",
 	"description": "",
 	"devDependencies": {
 		"@prisma/client": "^5.15.1",
+		"@react-email/components": "^0.0.19",
 		"@types/express": "^4.17.21",
 		"express": "^4.19.2",
 		"nodemon": "^3.1.3",
 		"prisma": "^5.15.1",
+		"react-email": "^2.1.4",
 		"resend": "^3.3.0",
 		"ts-node": "^10.9.2",
 		"tsconfig-paths": "^4.2.0"
+	},
+	"dependencies": {
+		"@next/font": "^14.2.4"
 	}
 }

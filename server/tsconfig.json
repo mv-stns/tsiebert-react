@@ -17,6 +17,7 @@
 		"esModuleInterop": true,
 		"resolveJsonModule": true,
 		"baseUrl": ".",
+		"jsx": "react",
 		"paths": {
 			"@controllers/*": ["src/controllers/*"],
 			"@routes/*": ["src/routes/*"],

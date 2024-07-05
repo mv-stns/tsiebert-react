@@ -21,7 +21,7 @@ export const PaintingManagement = (props: Props) => {
 	const [paintings, setPaintings] = useState([
 		{
 			id: 1,
-			image: "/placeholder.svg",
+			image: "https://images.unsplash.com/photo-1583119912267-cc97c911e416?ixid=M3wzMzU1Mzl8MHwxfHNlYXJjaHwyfHxwYWludGluZ3xlbnwwfDB8fHwxNzIwMjAxMjkxfDA&ixlib=rb-4.0.3",
 			title: "Sonnenuntergangsruhe",
 			type: "Ölgemälde",
 			size: '24" x 36"',
@@ -31,7 +31,7 @@ export const PaintingManagement = (props: Props) => {
 		},
 		{
 			id: 2,
-			image: "/placeholder.svg",
+			image: "https://images.unsplash.com/photo-1583119912267-cc97c911e416?ixid=M3wzMzU1Mzl8MHwxfHNlYXJjaHwyfHxwYWludGluZ3xlbnwwfDB8fHwxNzIwMjAxMjkxfDA&ixlib=rb-4.0.3",
 			title: "Herbstliche Freude",
 			type: "Acryl",
 			size: '18" x 24"',
@@ -41,7 +41,7 @@ export const PaintingManagement = (props: Props) => {
 		},
 		{
 			id: 3,
-			image: "/placeholder.svg",
+			image: "https://images.unsplash.com/photo-1583119912267-cc97c911e416?ixid=M3wzMzU1Mzl8MHwxfHNlYXJjaHwyfHxwYWludGluZ3xlbnwwfDB8fHwxNzIwMjAxMjkxfDA&ixlib=rb-4.0.3",
 			title: "Lebhafte Stadtszene",
 			type: "Aquarell",
 			size: '12" x 16"',
@@ -51,7 +51,7 @@ export const PaintingManagement = (props: Props) => {
 		},
 		{
 			id: 4,
-			image: "/placeholder.svg",
+			image: "https://images.unsplash.com/photo-1583119912267-cc97c911e416?ixid=M3wzMzU1Mzl8MHwxfHNlYXJjaHwyfHxwYWludGluZ3xlbnwwfDB8fHwxNzIwMjAxMjkxfDA&ixlib=rb-4.0.3",
 			title: "Ätherische Blüte",
 			type: "Ölgemälde",
 			size: '30" x 40"',
@@ -61,7 +61,7 @@ export const PaintingManagement = (props: Props) => {
 		},
 		{
 			id: 5,
-			image: "/placeholder.svg",
+			image: "https://images.unsplash.com/photo-1583119912267-cc97c911e416?ixid=M3wzMzU1Mzl8MHwxfHNlYXJjaHwyfHxwYWludGluZ3xlbnwwfDB8fHwxNzIwMjAxMjkxfDA&ixlib=rb-4.0.3",
 			title: "Küstenbrise",
 			type: "Acryl",
 			size: '20" x 30"',
@@ -71,7 +71,7 @@ export const PaintingManagement = (props: Props) => {
 		},
 		{
 			id: 6,
-			image: "/placeholder.svg",
+			image: "https://images.unsplash.com/photo-1583119912267-cc97c911e416?ixid=M3wzMzU1Mzl8MHwxfHNlYXJjaHwyfHxwYWludGluZ3xlbnwwfDB8fHwxNzIwMjAxMjkxfDA&ixlib=rb-4.0.3",
 			title: "Städtischer Rhythmus",
 			type: "Aquarell",
 			size: '16" x 20"',
@@ -115,7 +115,7 @@ export const PaintingManagement = (props: Props) => {
 	const handleCreateNewPainting = () => {
 		setEditingPainting({
 			id: Date.now(),
-			image: "/placeholder.svg",
+			image: "https://images.unsplash.com/photo-1583119912267-cc97c911e416?ixid=M3wzMzU1Mzl8MHwxfHNlYXJjaHwyfHxwYWludGluZ3xlbnwwfDB8fHwxNzIwMjAxMjkxfDA&ixlib=rb-4.0.3",
 			title: "",
 			type: "",
 			size: "",
@@ -189,7 +189,7 @@ export const PaintingManagement = (props: Props) => {
 				<div className={`grid ${viewMode === "grid" ? "grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3" : "grid-cols-1 gap-4"}`}>
 					{filteredPaintings.map((painting) => (
 						<Card key={painting.id} className={`cursor-pointer relative ${viewMode === "list" ? "flex items-center gap-4" : ""}`} onClick={() => handleEditPainting(painting)}>
-							<img src="/placeholder.svg" alt={painting.title} width={300} height={200} className={`w-full h-48 object-cover rounded-t-lg ${viewMode === "list" ? "w-32 h-24 rounded-lg" : ""}`} />
+							<img src={painting.image} alt={painting.title} width={300} height={200} className={`w-full h-48 object-cover rounded-t-lg ${viewMode === "list" ? "w-32 h-24 rounded-lg" : ""}`} />
 							<div className={`p-4 ${viewMode === "list" ? "w-full" : "py-4"}`}>
 								<h3 className="text-lg not-italic font-sans font-bold">{painting.title}</h3>
 								<div className={`grid gap-2 text-sm text-muted-foreground ${viewMode === "list" ? "grid-cols-2 gap-x-4" : ""}`}>

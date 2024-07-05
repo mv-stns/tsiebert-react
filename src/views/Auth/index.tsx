@@ -14,6 +14,7 @@ import { env } from "process";
 const LoginPage = () => {
 	const BACKEND_KEY = import.meta.env.VITE_BACKEND_KEY;
 	const submitRef = useRef<HTMLButtonElement>(null);
+	const [hasError, setHasError] = useState(false);
 	const FormSchema = z.object({
 		email: z.string().email("Bitte geben Sie eine gültige E-Mail-Adresse ein"),
 		password: z.string().min(6, "Das Passwort muss mindestens 6 Zeichen lang sein"),
@@ -64,12 +65,22 @@ const LoginPage = () => {
 					// save token to local storage
 					localStorage.setItem("token", json.token);
 					window.location.href = "/dashboard";
+
 					return "Los gehts!";
 				},
 				error: "Fehler beim Delay!",
 			});
 		} catch (error) {
 			toast.error("An error occurred during authentication " + error);
+			setHasError(true);
+			if (hasError && submitRef.current !== null) {
+				setHasError(false);
+				setTimeout(() => {
+					submitRef.current.disabled = false;
+					submitRef.current.classList.remove("cursor-not-allowed", "opacity-50", "pointer-events-none");
+					submitRef.current.innerHTML = "Senden";
+				}, 2000);
+			}
 		}
 	};
 

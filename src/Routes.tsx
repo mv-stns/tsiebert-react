@@ -19,6 +19,11 @@ const MainRoutes = () => (
 		<Route path="login">
 			<Route path="/login" element={<Auth />} />
 		</Route>
+
+		{/* if route not found, route to 404 not found */}
+		<Route path="*" element={<Navigate to="/404" />} />
+		<Route path = "/404" element={<h1>404 Not Found</h1>} />
+
 	</Routes>
 );
 

@@ -4,7 +4,7 @@ import { emailMessage } from '../../emails/index';
 
 const mailClient = new PrismaClient().contactForm;
 
-const resend = new Resend();
+const resend = new Resend(process.env.RESEND_API_KEY);
 // if (process.env.NODE_ENV !== "production") {
 const mail = process.env.Node_ENV === "production" ? "marcusvaitschulis@gmail.com" : "marcusvaitschulis@gmail.com";
 

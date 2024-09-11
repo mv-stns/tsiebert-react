@@ -50,7 +50,7 @@ const Contact = () => {
 		// 	"message": "Inquiry 👋🏼",
 		// 	"phone": "01727486467"
 		// }
-		const mailUrl = "http://localhost:3000/mail";
+		const mailUrl = "/api/mail";
 		try {
 			const jsonData = JSON.stringify(data);
 			const sendContactForm = () =>
@@ -66,7 +66,7 @@ const Contact = () => {
 					);
 				});
 
-			const response = await sendContactForm();
+			const response = await sendContactForm() as Response;
 			const json = await response.json();
 			toast.success("Ihre Nachricht wurde erfolgreich gesendet");
 		} catch (error) {

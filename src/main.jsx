@@ -8,8 +8,12 @@ import { BrowserRouter } from "react-router-dom";
 ReactDOM.createRoot(document.getElementById("root")).render(
 	<React.StrictMode>
 		<BrowserRouter>
-			<App />
-			<Toaster />
+			<div vaul-drawer-wrapper="">
+				<div className="relative flex min-h-screen flex-col bg-background">
+					<App />
+				</div>
+			</div>
 		</BrowserRouter>
+		<Toaster richColors position="top-center" />
 	</React.StrictMode>
 );

@@ -56,14 +56,14 @@ module.exports = {
 				sm: "calc(var(--radius) - 4px)",
 			},
 			keyframes: {
-				"marquee": {
-					"0%": { transform: "translateX(0%)" },
-					"100%": { transform: "translateX(-100%)" },
-				},
-				"marquee2": {
-					"0%": { transform: "translateX(0%)" },
-					"100%": { transform: "translateX(-100%)" },
-				},
+				// "marquee": {
+				// 	"0%": { transform: "translateX(0%)" },
+				// 	"100%": { transform: "translateX(-100%)" },
+				// },
+				// "marquee2": {
+				// 	"0%": { transform: "translateX(0%)" },
+				// 	"100%": { transform: "translateX(-100%)" },
+				// },
 				"accordion-down": {
 					from: { height: "0" },
 					to: { height: "var(--radix-accordion-content-height)" },
@@ -72,6 +72,7 @@ module.exports = {
 					from: { height: "var(--radix-accordion-content-height)" },
 					to: { height: "0" },
 				},
+				marquee: (direction) => createMarqueeAnimation(direction),
 			},
 			animation: {
 				"accordion-down": "accordion-down 0.2s ease-out",
@@ -86,3 +87,11 @@ module.exports = {
 		require("@tailwindcss/forms"),
 	],
 };
+
+// custom function to create marquee animation
+function createMarqueeAnimation(direction) {
+	return {
+		"0%": { transform: `translateX(0%)` },
+		"100%": { transform: `translateX(-100%)` },
+	};
+}

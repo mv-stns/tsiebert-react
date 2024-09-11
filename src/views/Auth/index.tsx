@@ -2,19 +2,30 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Textarea } from "@/components/ui/textarea";
 import { useState, useRef } from "react";
 import { toast } from "sonner";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { env } from "process";
+import { set, useForm } from "react-hook-form";
+import { useCookies } from "react-cookie";
+import { cn, useMounted } from "@/lib/utils";
+import { LoadingIcon } from "@/components/icons";
+
+// localStorageSetter function to set multiple items in localStorage, accepts the following layout
+// {key: value, key2: value2, key3: value3, ...} so an array of objects
+function localStorageSetter(items: { [key: string]: string }) {
+	Object.entries(items).forEach(([key, value]) => {
+		localStorage.setItem(key, value);
+	});
+}
 
 const LoginPage = () => {
+	const mounted = useMounted();
 	const BACKEND_KEY = import.meta.env.VITE_BACKEND_KEY;
-	const submitRef = useRef<HTMLButtonElement>(null);
-	const [hasError, setHasError] = useState(false);
+	const [isLoading, setLoadingState] = useState(false);
 	const FormSchema = z.object({
 		email: z.string().email("Bitte geben Sie eine gültige E-Mail-Adresse ein"),
 		password: z.string().min(6, "Das Passwort muss mindestens 6 Zeichen lang sein"),
@@ -28,60 +39,103 @@ const LoginPage = () => {
 		},
 	});
 
+	const MagicLinkSchema = z.object({
+		email: z.string().email("Bitte geben Sie eine gültige E-Mail-Adresse ein"),
+	});
+
+	const magicLinkForm = useForm<z.infer<typeof MagicLinkSchema>>({
+		resolver: zodResolver(MagicLinkSchema),
+		defaultValues: {
+			email: "",
+		},
+	});
+
+	const magicLinkSubmit = async (data: z.infer<typeof MagicLinkSchema>) => {
+		setLoadingState(true);
+		console.log(data);
+		debugger;
+		const authUrl = "/api/users/magicauth";
+		toast.promise(
+			fetch(authUrl, {
+				method: "POST",
+				headers: {
+					"Authorization": `${BACKEND_KEY}`,
+					"Content-Type": "application/json", // Ensure the content type is set
+				},
+				body: JSON.stringify(data),
+			}).then(async (response) => {
+				if (!response.ok) {
+					const errorData = await response.text();
+					console.log(errorData);
+					throw new Error(errorData.toString());
+				}
+				return response;
+			}),
+			{
+				loading: "Ihre Anfrage wird bearbeitet...",
+				success: () => {
+					return "Bitte überprüfen Sie Ihre E-Mails!";
+				},
+				error: (error) => {
+					if (error.message) return error.message;
+					return "Ein Fehler ist aufgetreten!";
+				},
+			}
+		);
+		setLoadingState(false);
+	};
+
 	const onSubmit = async (data: z.infer<typeof FormSchema>) => {
-		// async await validation from localhost:3000/users/auth
-		const authUrl = "http://localhost:3000/users/auth";
+		setLoadingState(true);
+		const authUrl = "/api/users/auth";
 
 		console.log(data);
 
-		try {
-			const promise = () =>
-				new Promise((resolve) => {
-					resolve(
-						fetch(authUrl, {
-							method: "POST",
-							headers: {
-								"Authorization": `${BACKEND_KEY}`,
-								"Content-Type": "application/json", // Add Content-Type header
-							},
-							body: JSON.stringify(data),
-						})
-					);
-				});
-
-			if (submitRef.current !== null) {
-				submitRef.current.disabled = true;
-				submitRef.current.classList.add("cursor-not-allowed", "opacity-50", "pointer-events-none");
-				submitRef.current.innerHTML = `<svg class="animate-spin" width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="mingcuteLoadingFill0" x1="50%" x2="50%" y1="5.271%" y2="91.793%"><stop offset="0%" stop-color="currentColor"/><stop offset="100%" stop-color="currentColor" stop-opacity=".55"/></linearGradient><linearGradient id="mingcuteLoadingFill1" x1="50%" x2="50%" y1="15.24%" y2="87.15%"><stop offset="0%" stop-color="currentColor" stop-opacity="0"/><stop offset="100%" stop-color="currentColor" stop-opacity=".55"/></linearGradient></defs><g fill="none"><path d="M24 0v24H0V0zM12.593 23.258l-.011.002l-.071.035l-.02.004l-.014-.004l-.071-.035q-.016-.005-.024.005l-.004.01l-.017.428l.005.02l.01.013l.104.074l.015.004l.012-.004l.104-.074l.012-.016l.004-.017l-.017-.427q-.004-.016-.017-.018m.265-.113l-.013.002l-.185.093l-.01.01l-.003.011l.018.43l.005.012l.008.007l.201.093q.019.005.029-.008l.004-.014l-.034-.614q-.005-.019-.02-.022m-.715.002a.02.02 0 0 0-.027.006l-.006.014l-.034.614q.001.018.017.024l.015-.002l.201-.093l.01-.008l.004-.011l.017-.43l-.003-.012l-.01-.01z"/><path fill="url(#mingcuteLoadingFill0)" d="M8.749.021a1.5 1.5 0 0 1 .497 2.958A7.5 7.5 0 0 0 3 10.375a7.5 7.5 0 0 0 7.5 7.5v3c-5.799 0-10.5-4.7-10.5-10.5C0 5.23 3.726.865 8.749.021" transform="translate(1.5 1.625)"/><path fill="url(#mingcuteLoadingFill1)" d="M15.392 2.673a1.5 1.5 0 0 1 2.119-.115A10.48 10.48 0 0 1 21 10.375c0 5.8-4.701 10.5-10.5 10.5v-3a7.5 7.5 0 0 0 5.007-13.084a1.5 1.5 0 0 1-.115-2.118" transform="translate(1.5 1.625)"/></g></svg>`;
-			}
-
-			const response = (await promise()) as Response;
-			const json = await response.json();
-			// promise to wait 2 seconds before redirecting
-			const toastPromise = () => new Promise((resolve) => setTimeout(() => resolve({ name: "Viel Spaß" }), 2000));
-			toast.promise(toastPromise(), {
-				loading: "Erfolgreich Angemeldet! \n Sie werden in kürze Weitergeleitet",
-				success: () => {
-					// save token to local storage
-					localStorage.setItem("token", json.token);
-					window.location.href = "/dashboard";
-
-					return "Los gehts!";
-				},
-				error: "Fehler beim Delay!",
-			});
-		} catch (error) {
-			toast.error("An error occurred during authentication " + error);
-			setHasError(true);
-			if (hasError && submitRef.current !== null) {
-				setHasError(false);
-				setTimeout(() => {
-					submitRef.current.disabled = false;
-					submitRef.current.classList.remove("cursor-not-allowed", "opacity-50", "pointer-events-none");
-					submitRef.current.innerHTML = "Senden";
-				}, 2000);
-			}
+		if (!data || !data.email || !data.password || data.email === "" || data.password === "") {
+			toast.error("Bitte füllen Sie alle Felder aus!");
+			setLoadingState(false);
+			return;
 		}
+		console.log("Data: " + data);
+
+		toast.promise(
+			fetch(authUrl, {
+				method: "POST",
+				headers: {
+					"Authorization": `${BACKEND_KEY}`,
+					"Content-Type": "application/json", // Ensure the content type is set
+				},
+				body: JSON.stringify(data),
+			}).then(async (response) => {
+				if (!response.ok) {
+					const errorData = await response.text();
+					console.log(errorData);
+					throw new Error(errorData.toString());
+				}
+				console.log(response);
+				setTimeout(() => {
+					return response.text();
+				}, 2000);
+			}),
+			{
+				loading: "Authentifiziere...",
+				success: (data: any) => {
+					const token = Math.random().toString(36).substring(7);
+					localStorageSetter({ token: token, loggedIn: Date.now().toString()});
+					setTimeout(() => {
+						window.location.href = "/dashboard";
+					}, 2000);
+					return "Erfolgreich Angemeldet!";
+				},
+				error: (error) => {
+					if (error.message) return error.message;
+					return error;
+				},
+				finally: () => {
+					setLoadingState(false);
+				},
+			}
+		);
 	};
 
 	return (
@@ -100,52 +154,90 @@ const LoginPage = () => {
 					<div className="flex flex-col space-y-2 text-center">
 						<h1 className="text-2xl font-sans not-italic font-semibold tracking-tight">Anmelden</h1>
 						<p className="text-sm whitespace-nowrap text-muted-foreground">Willkommen zurück! Melden Sie sich an, um fortzufahren.</p>
-					</div>
-					<Form {...form}>
-						<form onSubmit={form.handleSubmit(onSubmit)} className="w-2/3 space-y-6 mx-auto flex flex-col">
-							<FormField
-								control={form.control}
-								name="email"
-								render={({ field }: { field: any }) => (
-									<FormItem className="w-full">
-										<FormLabel className="block text-[11px] font-medium text-slate-700 uppercase">E-Mail Adresse</FormLabel>
-										<FormControl>
-											<Input {...field} />
-										</FormControl>
-										<FormMessage />
-									</FormItem>
-								)}
-							/>
-							<FormField
-								control={form.control}
-								name="password"
-								render={({ field }: { field: any }) => (
-									<FormItem className="w-full">
-										<FormLabel className="block text-[11px] font-medium text-slate-700 uppercase">Passwort</FormLabel>
-										<FormControl>
-											<Input {...field} type="password" />
-										</FormControl>
-										<FormMessage />
-									</FormItem>
-								)}
-							/>
+						<Tabs defaultValue="account">
+							<TabsList className="w-2/3">
+								<TabsTrigger className="w-full" value="account">
+									Anmelden
+								</TabsTrigger>
+								<TabsTrigger className="w-full" value="magic-link">
+									Magic Link
+								</TabsTrigger>
+							</TabsList>
+							<TabsContent value="account">
+								<Form {...form}>
+									<form onSubmit={form.handleSubmit(onSubmit)} className="w-2/3 space-y-6 mx-auto flex flex-col">
+										<FormField
+											control={form.control}
+											name="email"
+											render={({ field }: { field: any }) => (
+												<FormItem className="w-full">
+													<FormLabel className="block text-[11px] text-left font-medium text-slate-700 uppercase">E-Mail Adresse</FormLabel>
+													<FormControl>
+														<Input {...field} />
+													</FormControl>
+													<FormMessage />
+												</FormItem>
+											)}
+										/>
+										<FormField
+											control={form.control}
+											name="password"
+											render={({ field }: { field: any }) => (
+												<FormItem className="w-full">
+													<FormLabel className="block text-[11px] font-medium text-left text-slate-700 uppercase">Passwort</FormLabel>
+													<FormControl>
+														<Input {...field} type="password" />
+													</FormControl>
+													<FormMessage />
+												</FormItem>
+											)}
+										/>
 
-							<p className="px-8 text-center text-sm text-muted-foreground">
-								Indem Sie auf Weiter klicken, stimmen Sie unseren{" "}
-								<a href="/terms" className="underline underline-offset-4 hover:text-primary">
-									Nutzungsbedingungen
-								</a>{" "}
-								und{" "}
-								<a href="/privacy" className="underline underline-offset-4 hover:text-primary">
-									Datenschutzrichtlinie
-								</a>{" "}
-								zu.
-							</p>
-							<Button ref={submitRef} type="submit">
-								Senden
-							</Button>
-						</form>
-					</Form>
+										<p className="px-8 text-center text-sm text-muted-foreground">
+											Indem Sie auf Weiter klicken, stimmen Sie unseren{" "}
+											<a href="/terms" className="underline underline-offset-4 hover:text-primary">
+												Nutzungsbedingungen
+											</a>{" "}
+											und{" "}
+											<a href="/privacy" className="underline underline-offset-4 hover:text-primary">
+												Datenschutzrichtlinie
+											</a>{" "}
+											zu.
+										</p>
+										<Button
+											type="submit"
+											disabled={isLoading}
+											className={cn("", {
+												"disabled cursor": isLoading,
+											})}
+										>
+											{isLoading ? <LoadingIcon /> : <>Senden</>}
+										</Button>
+									</form>
+								</Form>
+							</TabsContent>
+							<TabsContent value="magic-link">
+								<Form {...magicLinkForm}>
+									<form onSubmit={magicLinkForm.handleSubmit(magicLinkSubmit)} className="w-2/3 space-y-6 mx-auto flex flex-col">
+										<FormField
+											control={magicLinkForm.control}
+											name="email"
+											render={({ field }: { field: any }) => (
+												<FormItem className="w-full">
+													<FormLabel className="block text-[11px] text-left font-medium text-slate-700 uppercase">E-Mail Adresse</FormLabel>
+													<FormControl>
+														<Input {...field} />
+													</FormControl>
+													<FormMessage />
+												</FormItem>
+											)}
+										/>
+										<Button type="submit">Senden</Button>
+									</form>
+								</Form>
+							</TabsContent>
+						</Tabs>
+					</div>
 				</div>
 			</div>
 		</div>

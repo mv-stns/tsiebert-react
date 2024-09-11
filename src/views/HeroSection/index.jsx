@@ -5,7 +5,9 @@ const HeroSection = () => {
 
 	useEffect(() => {
 		const importImages = async () => {
-			const images = import.meta.glob(`/src/assets/paintings/*.webp`);
+			let images = import.meta.glob(`/public/uploads/paintings/*.webp`);
+			// add further images from folder src/assets/paintings
+			images = { ...import.meta.glob(`/src/assets/paintings/*.webp`) };
 			const imageArray = await Promise.all(
 				Object.keys(images).map(async (key) => {
 					const module = await images[key]();

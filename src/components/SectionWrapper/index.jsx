@@ -1,4 +1,5 @@
 import PropTypes from "prop-types";
+import { cn } from "@/lib/utils";
 
 const SectionWrapper = ({ title, children, viewType = "default", className = "" }) => {
 	const sectionId = (title || "").toLowerCase().replace(/\s/g, "-");
@@ -13,7 +14,7 @@ const SectionWrapper = ({ title, children, viewType = "default", className = "" 
 	);
 
 	const renderAlternativeView = () => (
-		<section id={sectionId ? sectionId : undefined} className={`flex flex-col py-16 items-start gap-14 px-6 sm:px-12 md:px-12 relative container mx-auto ${className}`}>
+		<section id={sectionId ? sectionId : undefined} className={cn("flex flex-col py-16 items-start gap-14 px-6 sm:px-12 md:px-12 relative", className)}>
 			{children}
 		</section>
 	);

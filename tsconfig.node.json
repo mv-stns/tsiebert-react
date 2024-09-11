@@ -13,7 +13,8 @@
 			"@views/*": ["./views/*"],
 			"@styles/*": ["./styles/*"],
 			"@utils/*": ["./utils/*"]
-		}
+		},
+		"types": ["node", "vite/client"],
 	},
-	"include": ["vite.config.ts"]
+	"include": ["vite.config.ts", "env.d.ts"]
 }

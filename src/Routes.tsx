@@ -1,29 +1,47 @@
 import React from "react";
-import { Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route, Navigate, Outlet } from "react-router-dom";
 import Auth from "@views/Auth";
 import Dashboard from "@views/Dashboard";
-import Landingpage from "./Landingpage";
+import Landingpage from "@views/Landingpage";
+import LinkSent from '@views/Auth/LinkSent';
+import SuccessLogin from '@views/Auth/SuccessLogin';
+
+// AuthLayout-Komponente als Wrapper für Auth-Routen
+function AuthLayout() {
+	return (
+		<div>
+			<Outlet />
+		</div>
+	);
+}
+
+function NotFound() {
+	return (
+		<div>
+			<h1>404 - Not Found</h1>
+		</div>
+	);
+}
 
 const MainRoutes = () => (
 	<Routes>
 		{/** Public Routes */}
-
-		<Route>
-			<Route path="/" element={<Landingpage />}>
-				<Route path="/" element={<Navigate to="login" />} />
-			</Route>
-		</Route>
-		
+		<Route path="/" element={<Landingpage />} />
 		<Route path="/dashboard" element={<Dashboard />} />
 
-		<Route path="login">
-			<Route path="/login" element={<Auth />} />
+		{/** Auth Routes */}
+		<Route path="/auth" element={<AuthLayout />}>
+			<Route index element={<Auth />} />
+			<Route path="/auth/link/sent" element={<LinkSent />} />
+			<Route path="/auth/link/success" element={<SuccessLogin />} />
 		</Route>
 
-		{/* if route not found, route to 404 not found */}
-		<Route path="*" element={<Navigate to="/404" />} />
-		<Route path = "/404" element={<h1>404 Not Found</h1>} />
+		{/** Login Route */}
+		<Route path="/login" element={<Auth />} />
 
+		{/** 404 Route */}
+		<Route path="*" element={<Navigate to="/404" />} />
+		<Route path="/404" element={<NotFound />} />
 	</Routes>
 );
 
